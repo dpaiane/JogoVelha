@@ -1,402 +1,204 @@
 <!DOCTYPE html>
-ryan
-<html>
+<html lang="pt-BR">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="~/CSS/style.css">
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Velha</title>
     <style>
-        body{
-            background-color:burlywood;
+        body {
+            background-color: burlywood;
+            font-family: Arial, sans-serif;
         }
-        
+
         div {
-                background-color: cornsilk;
-                text-align:center;
-                color: black;
-                border: 2px solid black;
-                border-radius: 15px;
-                padding: 10px;
-                width: 340px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-        
+            background-color: cornsilk;
+            text-align: center;
+            color: black;
+            border: 2px solid black;
+            border-radius: 15px;
+            padding: 10px;
+            width: 340px;
+            margin: 20px auto;
+        }
+
         button {
-            transition-duration: 0.4s;
+            transition: 0.4s;
             background-color: cornsilk;
             width: 50px;
             height: 50px;
-            border: 0px;
+            font-size: 20px;
+            border: 1px solid black;
+            cursor: pointer;
         }
-        
-            button:hover {
-                background-color: red;
-                color: white;
-            }
-        
-        table{
-            border-spacing:0px;
-            margin:auto;
+
+        button:hover {
+            background-color: red;
+            color: white;
         }
-        
-        td{
-            border-left:2px solid black;
-            border-top:2px solid black;
+
+        table {
+            border-spacing: 0;
+            margin: auto;
         }
-        .td_Direita{
-            border-left:0px;
+
+        td {
+            border: 2px solid black;
         }
-        
-        .td_top{
-            border-top:0px;
+
+        .no-border-top {
+            border-top: none;
         }
-        
+
+        .no-border-left {
+            border-left: none;
+        }
+
         #areaJS {
             position: relative;
-            top:50px;
+            top: 30px;
             width: 340px;
-            height: 70px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto;
         }
-        
-        #area {
-            position: relative;
-            top: 25px;
-        
-            margin-left: auto;
-            margin-right: auto;
-            text-align:center;
-            align-content:center;
-            align-items:center;
-            align-self:center;
-        }
-        </style>
 
-    <title>Jogo da Velha</title>
-    <title></title>
+        .reset-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: black;
+            color: white;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .reset-button:hover {
+            background-color: darkred;
+        }
+    </style>
 </head>
-
 <body onselectstart="return false" oncontextmenu="return false">
+
     <div>
-        <h2>Bem vindo ao nosso Jogo da Velha</h2>
+        <h2>Bem-vindo ao Jogo da Velha</h2>
         <p id="data"></p>
     </div>
-
 
     <div id="area">
         <table>
             <tr>
-                <td class="td_Direita td_top"><button id="1" value="1" onclick="jogar('1')"></button></td>
-                <td class="td_top"><button id="2" value="2" onclick="jogar('2')"></button></td>
-                <td class="td_top"><button id="3" value="3" onclick="jogar('3')"></button></td>
+                <td class="no-border-left no-border-top"><button id="1" onclick="jogar(1)"></button></td>
+                <td class="no-border-top"><button id="2" onclick="jogar(2)"></button></td>
+                <td class="no-border-top"><button id="3" onclick="jogar(3)"></button></td>
             </tr>
             <tr>
-                <td class="td_Direita"><button id="4" value="4" onclick="jogar('4')"></button></tdclass="td_Direita">
-                <td><button id="5" value="5" onclick="jogar('5')"></button></td>
-                <td><button id="6" value="6" onclick="jogar('6')"></button></td>
+                <td class="no-border-left"><button id="4" onclick="jogar(4)"></button></td>
+                <td><button id="5" onclick="jogar(5)"></button></td>
+                <td><button id="6" onclick="jogar(6)"></button></td>
             </tr>
             <tr>
-                <td class="td_Direita"><button id="7" value="7" onclick="jogar('7')"></button></tdclass="td_Direita">
-                <td><button id="8" value="8" onclick="jogar('8')"></button></td>
-                <td><button id="9" value="9" onclick="jogar('9')"></button></td>
+                <td class="no-border-left"><button id="7" onclick="jogar(7)"></button></td>
+                <td><button id="8" onclick="jogar(8)"></button></td>
+                <td><button id="9" onclick="jogar(9)"></button></td>
             </tr>
         </table>
-        <button class="button" onclick="location.reload()" >Reset</button>
+        <button class="reset-button" onclick="location.reload()">Reiniciar</button>
     </div>
 
     <div id="areaJS" onclick="FuncaoAviso()">
-        <p id="confirmacao">Preencha o formuário para realizar seu cadastro!</p>
+        <p id="confirmacao">Clique aqui para ver um aviso!</p>
     </div>
 
-    <!--Relacionar o arquivo de scripts JavaScript-->
     <script>
-        const dt = new Date().toLocaleString();
-const jogadas = 0;
+        const dataAtual = new Date().toLocaleString();
+        document.getElementById("data").innerText = dataAtual;
 
-document.getElementById("data").innerHTML = dt;
-
-
-function FuncaoAviso() {
-    alert('Este é apenas um painel de avisos!');
-}
-
-        let tabuleiro = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        let old = 0;
-
-function jogar(bot) {
-    if (jogadas < 10) {
-        if (tabuleiro[0] != "1") {
-            if (tabuleiro[bot] == "0") {
-                document.getElementById(bot).innerHTML = "X";
-                tabuleiro[bot] = "X";
-                old = bot;
-
-                if (VerificaVitoria("X")) {
-                    document.getElementById("data").innerHTML = "Você Ganhou!!";
-                    tabuleiro[0] = "1";
-                } else {
-                    RoboJoga(old);
-                    if (VerificaVitoria("O")) {
-                        document.getElementById("data").innerHTML = "Você Perdeu!!";
-                        tabuleiro[0] = "1";
-                    }
-                }
-
-            } else {
-                alert("Escolha outra posição!");
-            }
-        } else {
-            alert("O jogo já acabou!");
+        function FuncaoAviso() {
+            alert('Este é apenas um painel de avisos!');
         }
-    } else {
-        document.getElementById("data").innerHTML = "O jogo Empatou!";
-        alert("O jogo empatou!");
-    }
-}
-function VerificaVitoria(jogador) {
-    if (tabuleiro[1] == jogador & tabuleiro[2] == jogador & tabuleiro[3] == jogador) {
-        return true;
-    } else if (tabuleiro[4] == jogador & tabuleiro[5] == jogador & tabuleiro[6] == jogador) {
-        return true;
-    } else if (tabuleiro[7] == jogador & tabuleiro[8] == jogador & tabuleiro[9] == jogador) {
-        return true;
-    } else if (tabuleiro[1] == jogador & tabuleiro[4] == jogador & tabuleiro[7] == jogador) {
-        return true;
-    } else if (tabuleiro[2] == jogador & tabuleiro[5] == jogador & tabuleiro[8] == jogador) {
-        return true;
-    } else if (tabuleiro[3] == jogador & tabuleiro[6] == jogador & tabuleiro[9] == jogador) {
-        return true;
-    } else if (tabuleiro[1] == jogador & tabuleiro[5] == jogador & tabuleiro[9] == jogador) {
-        return true;
-    } else if (tabuleiro[3] == jogador & tabuleiro[5] == jogador & tabuleiro[7] == jogador) {
-        return true;
-    } else {
-        return false;
-    }
-}
-        let number = 0;
-        let Jogada = 1;
-        let old_val = 0;
 
-        function RoboJoga(number) {
-            // let val = Math.floor(Math.random() * 8) + 1;
-            // number tem o numero da minha jogada
-            // e val tem o numero da jogada do robo
+        let tabuleiro = Array(10).fill(0); // Ignora índice 0
+        let jogoFinalizado = false;
+        let jogadas = 0;
 
-            let val = 0;
-            // Primeira jogada
-            if (number == 1 && Jogada == 1) {
-                val = 5;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
-                    
-                } else {
-                    RoboJoga();
-                }
+        function jogar(posicao) {
+            if (jogoFinalizado || tabuleiro[posicao] !== 0) {
+                alert(jogoFinalizado ? "O jogo já acabou!" : "Escolha outra posição!");
+                return;
+            }
 
-            }
-            else if (Jogada == 1 && number == 2) {
-                val = 5;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
-                    
-                } else {
-                    RoboJoga();
-                }
-            }
-            else if (Jogada == 1 && number == 3) {
-                val = 5;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
-                    
-                } else {
-                    RoboJoga();
-                }
-            }
-            else if (Jogada == 1 && number == 4) {
-                val = 5;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
-                    
-                } else {
-                    RoboJoga();
-                }
-            }
-            else if (Jogada == 1 && number == 5) {
-                val = 1;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
-                    
-                } else {
-                    RoboJoga();
-                }
-            }
-            else if (Jogada == 1 && number == 6) {
-                val = 5;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
-                    
-                } else {
-                    RoboJoga();
-                }
-            }
-            else if (Jogada == 1 && number == 7) {
-                val = 5;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
-                    
-                } else {
-                    RoboJoga();
-                }
-            }
-            else if (Jogada == 1 && number == 8) {
-                val = 5;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
-                    
-                } else {
-                    RoboJoga();
-                }
-            }
-            else if (Jogada == 1 && number == 9) {
-                val = 5;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
-                    
-                } else {
-                    RoboJoga();
-                }
-            }
-            // Segunda jogada
-            if (Jogada == 2 && number == 3) {
-                val = 7;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
+            document.getElementById(posicao).innerText = "X";
+            tabuleiro[posicao] = "X";
+            jogadas++;
 
-                } else {
-                    RoboJoga();
-                }
+            if (VerificaVitoria("X")) {
+                document.getElementById("data").innerText = "Você venceu!";
+                jogoFinalizado = true;
+                return;
             }
-            else if (Jogada == 2 && number == 7) {
-                val = 3;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
 
-                } else {
-                    RoboJoga();
+            if (jogadas < 9) {
+                RoboJoga();
+                jogadas++;
+                if (VerificaVitoria("O")) {
+                    document.getElementById("data").innerText = "Você perdeu!";
+                    jogoFinalizado = true;
                 }
+            } else {
+                document.getElementById("data").innerText = "Empate!";
             }
-            else if (Jogada == 2 && number == 8) {
-                val = 2;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
+        }
 
-                } else {
-                    RoboJoga();
-                }
-            }
-            else if (Jogada == 2 && number == 2) {
-                val = 8;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
+        function VerificaVitoria(jogador) {
+            const vitorias = [
+                [1, 2, 3], [4, 5, 6], [7, 8, 9], // Linhas
+                [1, 4, 7], [2, 5, 8], [3, 6, 9], // Colunas
+                [1, 5, 9], [3, 5, 7]             // Diagonais
+            ];
 
-                } else {
-                    RoboJoga();
-                }
-            }
-            // Terceira jogada
-            else if (Jogada == 3 && number != 3) {
-                val = 3;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
+            return vitorias.some(comb => comb.every(i => tabuleiro[i] === jogador));
+        }
 
-                } else {
-                    RoboJoga();
-                }
-            }
-            else if (Jogada == 3 && number == 3) {
-                val = 7;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
+        function RoboJoga() {
+            let jogada = -1;
 
-                } else {
-                    RoboJoga();
-                }
+            // Verifica se pode vencer
+            jogada = encontrarMelhorJogada("O");
+            if (jogada === -1) {
+                // Bloqueia o jogador se necessário
+                jogada = encontrarMelhorJogada("X");
             }
-            else if (Jogada == 3 && number != 2) {
-                val = 2;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
+            if (jogada === -1) {
+                // Caso não tenha jogadas estratégicas, joga aleatório
+                const disponiveis = tabuleiro
+                    .map((val, idx) => (val === 0 ? idx : null))
+                    .filter(idx => idx);
+                jogada = disponiveis[Math.floor(Math.random() * disponiveis.length)];
+            }
 
-                } else {
-                    RoboJoga();
-                }
+            if (jogada) {
+                document.getElementById(jogada).innerText = "O";
+                tabuleiro[jogada] = "O";
             }
-            else if (Jogada == 3 && number == 2) {
-                val = 9;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
+        }
 
-                } else {
-                    RoboJoga();
-                }
-            }
-            // Quarta jogada
-            else if (Jogada == 4 && number != 7) {
-                val = 7 ;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
+        function encontrarMelhorJogada(jogador) {
+            const combinacoes = [
+                [1, 2, 3], [4, 5, 6], [7, 8, 9],
+                [1, 4, 7], [2, 5, 8], [3, 6, 9],
+                [1, 5, 9], [3, 5, 7]
+            ];
 
-                } else {
-                    RoboJoga();
+            for (let combo of combinacoes) {
+                const [a, b, c] = combo;
+                const valores = [tabuleiro[a], tabuleiro[b], tabuleiro[c]];
+                if (valores.filter(v => v === jogador).length === 2 && valores.includes(0)) {
+                    return combo[valores.indexOf(0)];
                 }
             }
-            else if (Jogada == 4 && number == 7) {
-                val = 9;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
 
-                } else {
-                    RoboJoga();
-                }
-            }
-            else if (Jogada == 4 && number == 4) {
-                val = 6;
-                if (tabuleiro[val] == "0") {
-                    document.getElementById(val).innerHTML = "O";       // Jogada realizada
-                    tabuleiro[val] = "O";
-
-                } else {
-                    RoboJoga();
-                }
-            }
-            Jogada++;
-            let old_val = val;
-        }   
-   
+            return -1;
+        }
     </script>
-    <!--Foi colocado no final do arquivo para tornar a exibição da página mais rápida-->
+
 </body>
 </html>
